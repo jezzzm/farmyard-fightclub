@@ -15,7 +15,7 @@ app.initScenery = () => {
       return console.error('Scenery model not defined:', name);
     }
     const itemClone = app.scenery.models[name].clone();
-    const spread = 200;
+    const spread = 100;
     itemClone.position.set(
       THREE.MathUtils.randFloatSpread(spread),
       0, // THREE.MathUtils.randFloatSpread(spread),

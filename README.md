@@ -74,9 +74,29 @@ Can you push each other off the edge of a platform? Chase each other around?
 
 
 
+## Session 2
+- Switch camera POVs; limit camera angle (don't go below land)
+- refactor Character setup, subclass Player from Character
+- Game interaction stuff: collision detection;
+  raycasting ('what am i looking at?') - shooting lasers and seeing what you hit
+- sound effects; walking sound, dying sounds? positional sounds??
+- clean up changeState / changeAnimation code, to make it easier to
+  modify the animation params - i.e. walking backwards
 
+## Review
 
-
+- Load up scripts
+- main.js:
+   - app.init():
+     - create 3D scene
+     - load models and create characters: app.initCharacters()
+           - in modelmanager onLoad():
+                - add characters
+                - app.animate()  ---- MAIN GAME RENDER/UPDATE
+                    - for each character, call their update() method
+                         - updating the animation
+     - load scenery models: app.initScenery()
+     - load keyboard handlers: app.initKeys()
 
 
 #### CREDITS

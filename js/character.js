@@ -155,20 +155,21 @@ class Character {
     // and positioning) doesn't work if you don't do it
     this.object.position.set(this.opts.position.x, this.opts.position.y, this.opts.position.z);
     this.object.add(this.modelClone);
+    app.scene.add(this.object); // add to the game scene immediately
 
-    app.scene.add(this.object);
-
+    // Create a bounding box object for each character
     this.box = new THREE.BoxHelper(this.modelClone, 0xFFFF00);
     this.box.name = 'boundingBox';
-    this.box.geometry.computeBoundingBox(); // just once so we have access to this.box.boundingBox
+    this.box.geometry.computeBoundingBox(); // just once, so we have access to this.box.boundingBox
     this.box.visible = app.controls.debug;
     this.object.add(this.box);
 
-    if (this.constructor.name === 'Character') {
-      this.object.lookAt(Player.one.object.position)
+    if (this.constructor === Character) {
+      // Only run this code for Characters, not for the Player
+      this.object.lookAt(Player.one.object.position);
     }
 
-    this.constructor.all[name] = this; //add this character to list of chars
+    this.constructor.all[name] = this;  // add new character to our list of characters
 
 
     // pass in original model
@@ -184,6 +185,8 @@ class Character {
     const defaultAnimation = 'idle';
 
     this.animation.mixer = new THREE.AnimationMixer(this.modelClone);
+
+    this.animation.mixer.addEventListener('finished', this.handleAnimationFinished);
 
     this.animation.mixer.addEventListener('finished', this.handleAnimationFinished);
 
@@ -228,6 +231,34 @@ class Character {
       })
     }
   }
+
+  // This is the callback that runs whenever an animation finishes
+  // We need to use this arrow function syntax to get the correct value of 'this'
+  // inside this method, since it's a callback for the 'finished' event
+  handleAnimationFinished = (event) => {
+
+    console.log('ANIMATION FINISHED', event);
+
+    switch (event.action.name) {
+      case 'death':
+        // Turn animal into a wireframe ghost
+        // this.object.wireframe = true;
+        console.log('this', this);
+        this.object.traverse(child => {
+          if (child.isMesh) {
+            // Need to clone the material first, so we only wireframe THIS dead animal, not all
+            // 'horses' or 'cows' in the scene (which are sharing material references by default)
+            child.material = child.material.clone();
+            child.material.wireframe = true;  // Turn all meshes (for this dead animal) into wireframes!
+          }
+        });
+        this.changeState('walk');
+        break;
+    } // switch event.action.name
+
+
+  } // handleAnimationFinished()
+
 
   // This is called by app.animate, i.e. every re-render (60 times/sec)
   update(deltaTime) {
