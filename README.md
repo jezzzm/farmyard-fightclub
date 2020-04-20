@@ -14,7 +14,7 @@ cd ~
 git clone https://github.com/jezzzm/farmyard-fightclub.git
 
 # Go there:
-cd farmyard-fight-club
+cd farmyard-fightclub
 
 # Open editor
 atom .
