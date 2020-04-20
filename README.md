@@ -11,7 +11,7 @@ ___
 ```bash
 # Clone this repo to somewhere familiar:
 cd ~
-git clone https://github.com/textchimp/farmyard-fight-club.git
+git clone https://github.com/jezzzm/farmyard-fightclub.git
 
 # Go there:
 cd farmyard-fight-club
